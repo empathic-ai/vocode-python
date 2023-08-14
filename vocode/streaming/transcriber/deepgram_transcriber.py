@@ -257,7 +257,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
     def get_group_transcript(self, choice):
         words = choice["words"]
         current_speaker = -1
-        group_transcript = ""
+        group_transcript = "AY "
         for word in words:
             speaker = int.parse(word["speaker"])
             if current_speaker != speaker:
