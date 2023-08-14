@@ -238,7 +238,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
                         buffer = ""
                         time_silent = 0
                     elif top_choice["transcript"] and confidence > 0.0:
-                        buffer = self.get_group_transcript(top_choice)
+                        #buffer = self.get_group_transcript(top_choice)
                         self.output_queue.put_nowait(
                             Transcription(
                                 message=buffer,
