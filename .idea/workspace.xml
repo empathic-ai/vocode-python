@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="96d6e21f-c71d-4932-81eb-c142dce4f045" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vocode/streaming/transcriber/deepgram_transcriber.py" beforeDir="false" afterPath="$PROJECT_DIR$/vocode/streaming/transcriber/deepgram_transcriber.py" afterDir="false" />
-    </list>
+    <list default="true" id="96d6e21f-c71d-4932-81eb-c142dce4f045" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -43,6 +40,7 @@
       <updated>1692046702006</updated>
       <workItem from="1692046704890" duration="1853000" />
       <workItem from="1692050529214" duration="326000" />
+      <workItem from="1692053962459" duration="25000" />
     </task>
     <servers />
   </component>
