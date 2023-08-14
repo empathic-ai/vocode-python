@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="96d6e21f-c71d-4932-81eb-c142dce4f045" name="Changes" comment="" />
+    <list default="true" id="96d6e21f-c71d-4932-81eb-c142dce4f045" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vocode/streaming/transcriber/deepgram_transcriber.py" beforeDir="false" afterPath="$PROJECT_DIR$/vocode/streaming/transcriber/deepgram_transcriber.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -9,6 +12,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="2TzX5iNqU0s6mtpx7PL4OJ4ptVm" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -30,7 +41,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1692046702006</updated>
-      <workItem from="1692046704890" duration="1555000" />
+      <workItem from="1692046704890" duration="1853000" />
+      <workItem from="1692050529214" duration="326000" />
     </task>
     <servers />
   </component>

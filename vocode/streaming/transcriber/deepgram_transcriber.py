@@ -230,7 +230,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
 
                     if speech_final:
                         self.logger.info("TRANSCRIBING... 1")
-                        self.get_group_messages(top_choice)
+                        buffer = self.get_group_transcript(top_choice)
                         self.output_queue.put_nowait(
                             Transcription(
                                 message=buffer, confidence=confidence, is_final=True
@@ -239,7 +239,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
                         buffer = ""
                         time_silent = 0
                     elif top_choice["transcript"] and confidence > 0.0:
-                        self.logger.info("TRANSCRIBING... 2")
+                        buffer = self.get_group_transcript(top_choice)
                         self.output_queue.put_nowait(
                             Transcription(
                                 message=buffer,
@@ -254,7 +254,14 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
 
             await asyncio.gather(sender(ws), receiver(ws))
 
-    def get_group_messages(self, choice):
+    def get_group_transcript(self, choice):
         words = choice["words"]
+        current_speaker = -1
+        group_transcript = ""
         for word in words:
-            self.logger.debug(word["speaker"] + ": " + word["word"])
+            speaker = int.parse(word["speaker"])
+            if current_speaker != speaker:
+                current_speaker = speaker
+                group_transcript += f"\n[{current_speaker}]:"
+            group_transcript += f" {word['word']}"
+        return group_transcript
