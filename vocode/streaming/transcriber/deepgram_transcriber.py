@@ -255,4 +255,4 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
     def get_group_messages(self, choice):
         words = choice["words"]
         for word in words:
-            self.logger.d(word["speaker"] + ": " + word["word"])
+            self.logger.debug(word["speaker"] + ": " + word["word"])
