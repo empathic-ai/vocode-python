@@ -123,7 +123,7 @@ class StreamingConversation(Generic[OutputDeviceType]):
                 return
             if transcription.is_final:
                 self.conversation.logger.debug(
-                    "GOT transcription: {}, confidence: {}".format(
+                    "Got transcription: {}, confidence: {}".format(
                         transcription.message, transcription.confidence
                     )
                 )

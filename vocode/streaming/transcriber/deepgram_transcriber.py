@@ -229,7 +229,6 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
                         buffer = f"{buffer} {top_choice['transcript']}"
 
                     if speech_final:
-                        self.logger.info("TRANSCRIBING... 1")
                         buffer = self.get_group_transcript(top_choice)
                         self.output_queue.put_nowait(
                             Transcription(
@@ -257,11 +256,11 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
     def get_group_transcript(self, choice):
         words = choice["words"]
         current_speaker = -1
-        group_transcript = "AY "
+        group_transcript = ""
         for word in words:
             speaker = int(word["speaker"])
             if current_speaker != speaker:
                 current_speaker = speaker
-                group_transcript += f"\n[{current_speaker}]:"
+                group_transcript += f"\n[Speaker {current_speaker}]:"
             group_transcript += f" {word['word']}"
         return group_transcript
