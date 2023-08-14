@@ -259,7 +259,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
         current_speaker = -1
         group_transcript = "AY "
         for word in words:
-            speaker = int.parse(word["speaker"])
+            speaker = int(word["speaker"])
             if current_speaker != speaker:
                 current_speaker = speaker
                 group_transcript += f"\n[{current_speaker}]:"
