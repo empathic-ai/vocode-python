@@ -102,6 +102,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
             "sample_rate": self.transcriber_config.sampling_rate,
             "channels": 1,
             "interim_results": "true",
+            "diarize": "true"
         }
         extra_params = {}
         if self.transcriber_config.language:
@@ -228,6 +229,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
                         buffer = f"{buffer} {top_choice['transcript']}"
 
                     if speech_final:
+                        self.get_group_messages(top_choice)
                         self.output_queue.put_nowait(
                             Transcription(
                                 message=buffer, confidence=confidence, is_final=True
@@ -249,3 +251,8 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
                 self.logger.debug("Terminating Deepgram transcriber receiver")
 
             await asyncio.gather(sender(ws), receiver(ws))
+
+    def get_group_messages(self, choice):
+        words = choice["words"]
+        for word in words:
+            self.logger.d(word["speaker"] + ": " + word["word"])
