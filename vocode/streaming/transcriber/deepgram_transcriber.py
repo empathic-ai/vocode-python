@@ -259,7 +259,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
         group_transcript = ""
         for word in words:
             speaker = int(word["speaker"])
-            speaker_confidence = float(word["speaker_confidence"])
+            #speaker_confidence = float(word["speaker_confidence"])
             if current_speaker != speaker:
                 current_speaker = speaker
                 speaker_name = str(current_speaker+1)
