@@ -46,8 +46,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
             self,
             transcriber_config: DeepgramTranscriberConfig,
             api_key: Optional[str] = None,
-            logger: Optional[logging.Logger] = None,
-            is_group=True
+            logger: Optional[logging.Logger] = None
     ):
         super().__init__(transcriber_config)
         self.api_key = api_key or getenv("DEEPGRAM_API_KEY")
@@ -59,7 +58,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
         self.is_ready = False
         self.logger = logger or logging.getLogger(__name__)
         self.audio_cursor = 0.
-        self.is_group = is_group
+        self.is_group = False# is_group
 
     async def _run_loop(self):
         restarts = 0
