@@ -47,7 +47,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
             transcriber_config: DeepgramTranscriberConfig,
             api_key: Optional[str] = None,
             logger: Optional[logging.Logger] = None,
-            is_group=False
+            is_group=True
     ):
         super().__init__(transcriber_config)
         self.api_key = api_key or getenv("DEEPGRAM_API_KEY")
