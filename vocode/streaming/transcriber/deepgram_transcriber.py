@@ -20,8 +20,10 @@ from vocode.streaming.models.transcriber import (
 )
 from vocode.streaming.models.audio_encoding import AudioEncoding
 
+
 PUNCTUATION_TERMINATORS = [".", "!", "?"]
 NUM_RESTARTS = 5
+
 
 avg_latency_hist = meter.create_histogram(
     name="transcriber.deepgram.avg_latency",
@@ -43,11 +45,10 @@ duration_hist = meter.create_histogram(
 
 class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
     def __init__(
-            self,
-            transcriber_config: DeepgramTranscriberConfig,
-            api_key: Optional[str] = None,
-            logger: Optional[logging.Logger] = None,
-            is_group=False
+        self,
+        transcriber_config: DeepgramTranscriberConfig,
+        api_key: Optional[str] = None,
+        logger: Optional[logging.Logger] = None,
     ):
         super().__init__(transcriber_config)
         self.api_key = api_key or getenv("DEEPGRAM_API_KEY")
@@ -59,7 +60,6 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
         self.is_ready = False
         self.logger = logger or logging.getLogger(__name__)
         self.audio_cursor = 0.
-        self.is_group = is_group
 
     async def _run_loop(self):
         restarts = 0
@@ -72,8 +72,8 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
 
     def send_audio(self, chunk):
         if (
-                self.transcriber_config.downsampling
-                and self.transcriber_config.audio_encoding == AudioEncoding.LINEAR16
+            self.transcriber_config.downsampling
+            and self.transcriber_config.audio_encoding == AudioEncoding.LINEAR16
         ):
             chunk, _ = audioop.ratecv(
                 chunk,
@@ -102,7 +102,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
             "sample_rate": self.transcriber_config.sampling_rate,
             "channels": 1,
             "interim_results": "true",
-            "diarize": str(self.is_group)
+            "diarize": "true"
         }
         extra_params = {}
         if self.transcriber_config.language:
@@ -116,16 +116,16 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
         if self.transcriber_config.keywords:
             extra_params["keywords"] = self.transcriber_config.keywords
         if (
-                self.transcriber_config.endpointing_config
-                and self.transcriber_config.endpointing_config.type
-                == EndpointingType.PUNCTUATION_BASED
+            self.transcriber_config.endpointing_config
+            and self.transcriber_config.endpointing_config.type
+            == EndpointingType.PUNCTUATION_BASED
         ):
             extra_params["punctuate"] = "true"
         url_params.update(extra_params)
         return f"wss://api.deepgram.com/v1/listen?{urlencode(url_params)}"
 
     def is_speech_final(
-            self, current_buffer: str, deepgram_response: dict, time_silent: float
+        self, current_buffer: str, deepgram_response: dict, time_silent: float
     ):
         transcript = deepgram_response["channel"]["alternatives"][0]["transcript"]
 
@@ -133,32 +133,32 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
         if not self.transcriber_config.endpointing_config:
             return transcript and deepgram_response["speech_final"]
         elif (
-                self.transcriber_config.endpointing_config.type
-                == EndpointingType.TIME_BASED
+            self.transcriber_config.endpointing_config.type
+            == EndpointingType.TIME_BASED
         ):
             # if it is time based, then return true if there is no transcript
             # and there is some speech to send
             # and the time_silent is greater than the cutoff
             return (
-                    not transcript
-                    and current_buffer
-                    and (time_silent + deepgram_response["duration"])
-                    > self.transcriber_config.endpointing_config.time_cutoff_seconds
+                not transcript
+                and current_buffer
+                and (time_silent + deepgram_response["duration"])
+                > self.transcriber_config.endpointing_config.time_cutoff_seconds
             )
         elif (
-                self.transcriber_config.endpointing_config.type
-                == EndpointingType.PUNCTUATION_BASED
+            self.transcriber_config.endpointing_config.type
+            == EndpointingType.PUNCTUATION_BASED
         ):
             return (
-                           transcript
-                           and deepgram_response["speech_final"]
-                           and transcript.strip()[-1] in PUNCTUATION_TERMINATORS
-                   ) or (
-                           not transcript
-                           and current_buffer
-                           and (time_silent + deepgram_response["duration"])
-                           > self.transcriber_config.endpointing_config.time_cutoff_seconds
-                   )
+                transcript
+                and deepgram_response["speech_final"]
+                and transcript.strip()[-1] in PUNCTUATION_TERMINATORS
+            ) or (
+                not transcript
+                and current_buffer
+                and (time_silent + deepgram_response["duration"])
+                > self.transcriber_config.endpointing_config.time_cutoff_seconds
+            )
         raise Exception("Endpointing config not supported")
 
     def calculate_time_silent(self, data: dict):
@@ -173,7 +173,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
         extra_headers = {"Authorization": f"Token {self.api_key}"}
 
         async with websockets.connect(
-                self.get_deepgram_url(), extra_headers=extra_headers
+            self.get_deepgram_url(), extra_headers=extra_headers
         ) as ws:
 
             async def sender(ws: WebSocketClientProtocol):  # sends audio to websocket
@@ -185,9 +185,9 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
                     num_channels = 1
                     sample_width = 2
                     self.audio_cursor += len(data) / (
-                            self.transcriber_config.sampling_rate
-                            * num_channels
-                            * sample_width
+                        self.transcriber_config.sampling_rate
+                        * num_channels
+                        * sample_width
                     )
                     await ws.send(data)
                 self.logger.debug("Terminating Deepgram transcriber sender")
@@ -204,7 +204,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
                         break
                     data = json.loads(msg)
                     if (
-                            not "is_final" in data
+                        not "is_final" in data
                     ):  # means we've finished receiving transcriptions
                         break
                     cur_max_latency = self.audio_cursor - transcript_cursor
@@ -229,8 +229,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
                         buffer = f"{buffer} {top_choice['transcript']}"
 
                     if speech_final:
-                        if self.is_group:
-                            buffer = self.get_group_transcript(top_choice)
+                        buffer = self.get_group_transcript(top_choice)
                         self.output_queue.put_nowait(
                             Transcription(
                                 message=buffer, confidence=confidence, is_final=True
@@ -239,6 +238,7 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
                         buffer = ""
                         time_silent = 0
                     elif top_choice["transcript"] and confidence > 0.0:
+                        #buffer = self.get_group_transcript(top_choice)
                         self.output_queue.put_nowait(
                             Transcription(
                                 message=buffer,
@@ -259,11 +259,11 @@ class DeepgramTranscriber(BaseAsyncTranscriber[DeepgramTranscriberConfig]):
         group_transcript = ""
         for word in words:
             speaker = int(word["speaker"])
-            # speaker_confidence = float(word["speaker_confidence"])
+            #speaker_confidence = float(word["speaker_confidence"])
             if current_speaker != speaker:
                 current_speaker = speaker
-                speaker_name = str(current_speaker + 1)
-                # if speaker_confidence < .5:
+                speaker_name = str(current_speaker+1)
+                #if speaker_confidence < .5:
                 #    speaker_name = "?"
                 group_transcript += f"\n[Speaker {speaker_name}]:"
             group_transcript += f" {word['word']}"
