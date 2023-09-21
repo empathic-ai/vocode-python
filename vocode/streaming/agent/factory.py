@@ -26,7 +26,7 @@ from vocode.streaming.models.agent import (
 
 class AgentFactory:
     def create_agent(
-        self, agent_config: AgentConfig, logger: Optional[logging.Logger] = None
+        self, agent_config: AgentConfig, conversation_id: Optional[str] = None, logger: Optional[logging.Logger] = None
     ) -> BaseAgent:
         if isinstance(agent_config, LLMAgentConfig):
             return LLMAgent(agent_config=agent_config, logger=logger)
