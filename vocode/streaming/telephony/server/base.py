@@ -1,8 +1,9 @@
 import abc
+import os
 from functools import partial
 import logging
 from typing import List, Optional
-from fastapi import APIRouter, Form, Request, Response
+from fastapi import APIRouter, Form, Request, Response, HTTPException
 from pydantic import BaseModel, Field
 from vocode.streaming.agent.factory import AgentFactory
 from vocode.streaming.models.agent import AgentConfig
@@ -37,7 +38,8 @@ from vocode.streaming.transcriber.base_transcriber import BaseTranscriber
 from vocode.streaming.transcriber.factory import TranscriberFactory
 from vocode.streaming.utils import create_conversation_id
 from vocode.streaming.utils.events_manager import EventsManager
-
+from twilio.twiml.messaging_response import MessagingResponse
+from twilio.request_validator import RequestValidator
 
 class AbstractInboundCallConfig(BaseModel, abc.ABC):
     url: str
@@ -61,6 +63,8 @@ class VonageAnswerRequest(BaseModel):
 
 
 class TelephonyServer:
+    VALIDATOR = RequestValidator(os.environ["TWILIO_AUTH_TOKEN"])
+
     def __init__(
         self,
         base_url: str,
@@ -95,13 +99,41 @@ class TelephonyServer:
                 self.create_inbound_route(inbound_call_config=config),
                 methods=["POST"],
             )
+
+        # twilio SMS endpoint
+        self.app.add_api_route("/sms", self.handle_sms, methods=["POST"])
+
         # vonage requires an events endpoint
         self.router.add_api_route("/events", self.events, methods=["GET", "POST"])
         self.logger.info(f"Set up events endpoint at https://{self.base_url}/events")
 
         self.router.add_api_route("/recordings/{conversation_id}", self.recordings, methods=["GET", "POST"])
         self.logger.info(f"Set up recordings endpoint at https://{self.base_url}/recordings/{{conversation_id}}")
- 
+
+    def validate_twilio_request(self, request: Request) -> bool:
+        signature = request.headers.get("X-Twilio-Signature")
+        url = str(request.url)
+        params = request.form
+        return self.VALIDATOR.validate(url, params, signature)
+
+    async def handle_sms(self, request: Request):
+        if not self.validate_twilio_request(request):
+            raise HTTPException(status_code=400, detail="Invalid Twilio request")
+
+        # Extract the message body from the incoming POST request
+        form_data = await request.form()
+        incoming_msg = form_data.get("Body")
+
+        # Process the incoming message (this step is up to you)
+        # Here's a simple example that echoes back the received SMS
+        reply_msg = f"You said: {incoming_msg}"
+
+        # Create a TwiML response
+        response = MessagingResponse()
+        response.message(reply_msg)
+
+        return str(response)
+
     def events(self, request: Request):
         return Response()
 
