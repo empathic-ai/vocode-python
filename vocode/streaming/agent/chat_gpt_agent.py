@@ -141,9 +141,11 @@ class ChatGPTAgent(RespondAgent[ChatGPTAgentConfig]):
             return
         assert self.transcript is not None
 
-        if self.agent_config.vector_db_config:
+        last_user_message = self.transcript.get_last_user_message()
+
+        if last_user_message and self.agent_config.vector_db_config:
             docs_with_scores = await self.vector_db.similarity_search_with_score(
-                self.transcript.get_last_user_message()[1]
+                last_user_message[1]
             )
             docs_with_scores_str = "\n\n".join(
                 [
