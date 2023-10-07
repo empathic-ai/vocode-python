@@ -17,6 +17,7 @@ from vocode.streaming.telephony.client.vonage_client import VonageClient
 from vocode.streaming.telephony.config_manager.base_config_manager import (
     BaseConfigManager,
 )
+from vocode import getenv
 from vocode.streaming.telephony.constants import (
     DEFAULT_AUDIO_ENCODING,
     DEFAULT_CHUNK_SIZE,
@@ -63,8 +64,6 @@ class VonageAnswerRequest(BaseModel):
 
 
 class TelephonyServer:
-    VALIDATOR = RequestValidator(os.environ["TWILIO_AUTH_TOKEN"])
-
     def __init__(
         self,
         base_url: str,
@@ -111,10 +110,11 @@ class TelephonyServer:
         self.logger.info(f"Set up recordings endpoint at https://{self.base_url}/recordings/{{conversation_id}}")
 
     def validate_twilio_request(self, request: Request) -> bool:
+        VALIDATOR = RequestValidator(getenv("TWILIO_AUTH_TOKEN"])
         signature = request.headers.get("X-Twilio-Signature")
         url = str(request.url)
         params = request.form
-        return self.VALIDATOR.validate(url, params, signature)
+        return VALIDATOR.validate(url, params, signature)
 
     async def handle_sms(self, request: Request):
         if not self.validate_twilio_request(request):
