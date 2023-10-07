@@ -53,6 +53,10 @@ class ConversationStateManager:
         )
         return agent_response_tracker
 
+    @property
+    def conversation(self):
+        return self._conversation
+
 
 class VonageCallStateManager(ConversationStateManager):
     def __init__(self, call: "VonageCall"):
