@@ -110,7 +110,7 @@ class TelephonyServer:
         self.logger.info(f"Set up recordings endpoint at https://{self.base_url}/recordings/{{conversation_id}}")
 
     def validate_twilio_request(self, request: Request) -> bool:
-        VALIDATOR = RequestValidator(getenv("TWILIO_AUTH_TOKEN"])
+        VALIDATOR = RequestValidator(getenv("TWILIO_AUTH_TOKEN"))
         signature = request.headers.get("X-Twilio-Signature")
         url = str(request.url)
         params = request.form
