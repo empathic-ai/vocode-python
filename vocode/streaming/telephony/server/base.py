@@ -100,7 +100,7 @@ class TelephonyServer:
             )
 
         # twilio SMS endpoint
-        self.app.add_api_route("/sms", self.handle_sms, methods=["POST"])
+        self.router.add_api_route("/sms", self.handle_sms, methods=["POST"])
 
         # vonage requires an events endpoint
         self.router.add_api_route("/events", self.events, methods=["GET", "POST"])
