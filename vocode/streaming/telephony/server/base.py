@@ -147,7 +147,9 @@ class TelephonyServer:
             agent = self.call_manager.agents_by_number[phone_number]
             conversation = agent.conversation_state_manager.conversation
             conversation_id = conversation.id
-            transcript = self.call_manager.agents_by_number[phone_number].transcript
+            #transcript = self.call_manager.agents_by_number[phone_number].transcript
+            #for event in transcript.event_logs:
+
             self.logger.info(f"Transcript:\n\n{transcript}\n\n")
             self.call_manager.agents_by_number[phone_number].input_queue.put_nowait(
                 InterruptibleEvent(
@@ -170,7 +172,7 @@ class TelephonyServer:
 
         # Create a TwiML response
         response = MessagingResponse()
-        response.message(reply_msg)
+        #response.message(reply_msg)
 
         return Response(content=str(response), media_type="text/html")
 
