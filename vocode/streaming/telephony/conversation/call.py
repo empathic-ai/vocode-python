@@ -61,7 +61,7 @@ class Call(StreamingConversation[TelephonyOutputDeviceType]):
         self.to_phone = to_phone
         self.base_url = base_url
         self.config_manager = config_manager
-        self.telephony_server = telephony_server
+        self.call_manager = call_manager
 
         agent = agent_factory.create_agent(agent_config, conversation_id=conversation_id, logger=logger)
         call_manager.agents_by_number[from_phone] = agent
