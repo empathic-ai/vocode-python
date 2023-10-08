@@ -41,10 +41,10 @@ from vocode.streaming.utils import create_conversation_id
 from vocode.streaming.utils.events_manager import EventsManager
 from twilio.twiml.messaging_response import MessagingResponse
 from twilio.request_validator import RequestValidator
-from vocode.streaming.agent.base_agent import BaseAgent
 from vocode.streaming.transcriber.base_transcriber import (
     Transcription
 )
+from vocode.streaming.telephony.call_manager import CallManager
 
 class AbstractInboundCallConfig(BaseModel, abc.ABC):
     url: str
@@ -68,7 +68,7 @@ class VonageAnswerRequest(BaseModel):
 
 
 class TelephonyServer:
-    agents_by_number: Dict[str, BaseAgent] = {}
+    call_manager: CallManager
 
     def __init__(
         self,
@@ -95,7 +95,7 @@ class TelephonyServer:
                 agent_factory=agent_factory,
                 synthesizer_factory=synthesizer_factory,
                 events_manager=self.events_manager,
-                telephony_server=self,
+                call_manager=call_manager,
                 logger=self.logger,
             ).get_router()
         )
@@ -136,8 +136,8 @@ class TelephonyServer:
         # Here's a simple example that echoes back the received SMS
         reply_msg = f"You said: {incoming_msg}"
         
-        if phone_number in self.agents_by_number:
-            self.agents_by_number[phone_number].input_queue.put_nowait(
+        if phone_number in self.call_manager.agents_by_number:
+            self.call_manager.agents_by_number[phone_number].input_queue.put_nowait(
                 Transcription(
                     message=incoming_msg,
                     confidence=1.0,

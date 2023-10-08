@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96d6e21f-c71d-4932-81eb-c142dce4f045" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vocode-python.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vocode-python.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vocode/streaming/telephony/call_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vocode/streaming/telephony/config_manager/redis_config_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/vocode/streaming/telephony/config_manager/redis_config_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vocode/streaming/telephony/conversation/call.py" beforeDir="false" afterPath="$PROJECT_DIR$/vocode/streaming/telephony/conversation/call.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vocode/streaming/telephony/conversation/twilio_call.py" beforeDir="false" afterPath="$PROJECT_DIR$/vocode/streaming/telephony/conversation/twilio_call.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vocode/streaming/telephony/server/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/vocode/streaming/telephony/server/base.py" afterDir="false" />
@@ -14,6 +13,13 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -87,11 +93,22 @@
       <workItem from="1692053962459" duration="25000" />
       <workItem from="1695321633752" duration="1735000" />
       <workItem from="1696641524977" duration="990000" />
-      <workItem from="1696646647793" duration="16767000" />
+      <workItem from="1696646647793" duration="17589000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
