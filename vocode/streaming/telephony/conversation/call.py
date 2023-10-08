@@ -64,7 +64,8 @@ class Call(StreamingConversation[TelephonyOutputDeviceType]):
         self.call_manager = call_manager
 
         agent = agent_factory.create_agent(agent_config, conversation_id=conversation_id, logger=logger)
-        call_manager.agents_by_number[to_phone] = agent
+        self.logger.info(f"Added number '{from_phone}'")
+        call_manager.agents_by_number[from_phone] = agent
 
         super().__init__(
             output_device,
