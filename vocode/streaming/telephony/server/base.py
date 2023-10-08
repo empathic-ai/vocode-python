@@ -147,6 +147,8 @@ class TelephonyServer:
             agent = self.call_manager.agents_by_number[phone_number]
             conversation = agent.conversation_state_manager.conversation
             conversation_id = conversation.id
+            transcript = self.call_manager.agents_by_number[phone_number].transcript
+            self.logger.info(f"Transcript:\n\n{transcript}\n\n")
             self.call_manager.agents_by_number[phone_number].input_queue.put_nowait(
                 InterruptibleEvent(
                     payload=TranscriptionAgentInput(
