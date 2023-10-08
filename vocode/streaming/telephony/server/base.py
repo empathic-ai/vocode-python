@@ -137,6 +137,7 @@ class TelephonyServer:
         reply_msg = f"You said: {incoming_msg}"
         
         if phone_number in self.call_manager.agents_by_number:
+            self.logger.info(f"Phone number present in call manager!")
             self.call_manager.agents_by_number[phone_number].input_queue.put_nowait(
                 Transcription(
                     message=incoming_msg,
