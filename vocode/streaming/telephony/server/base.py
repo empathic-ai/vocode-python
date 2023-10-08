@@ -123,13 +123,14 @@ class TelephonyServer:
         # Extract the message body from the incoming POST request
         form_data = await request.form()
         incoming_msg = form_data.get("Body")
-        phone_number = form_data.get("from")
+        phone_number = form_data.get("From")
 
         # Process the incoming message (this step is up to you)
         # Here's a simple example that echoes back the received SMS
         reply_msg = f"You said: {incoming_msg}"
 
         self.logger.info(f"Responding to message '{incoming_msg}' from {phone_number} with '{reply_msg}'!")
+        self.logger.info(f"Responding to form '{form_data}'!")
 
         # Create a TwiML response
         response = MessagingResponse()
