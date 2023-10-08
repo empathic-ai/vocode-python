@@ -48,6 +48,9 @@ from vocode.streaming.telephony.call_manager import CallManager
 from vocode.streaming.agent.base_agent import (
     TranscriptionAgentInput
 )
+from vocode.streaming.utils.worker import (
+    InterruptibleEvent
+)
 
 class AbstractInboundCallConfig(BaseModel, abc.ABC):
     url: str
@@ -145,15 +148,18 @@ class TelephonyServer:
             conversation = agent.conversation_state_manager.conversation
             conversation_id = conversation.id
             self.call_manager.agents_by_number[phone_number].input_queue.put_nowait(
-                TranscriptionAgentInput(
-                    transcription=Transcription(
-                        message=incoming_msg,
-                        confidence=1.0,
-                        is_final=True,
+                InterruptibleEvent(
+                    payload=TranscriptionAgentInput(
+                        transcription=Transcription(
+                            message=incoming_msg,
+                            confidence=1.0,
+                            is_final=False,
+                        ),
+                        conversation_id=conversation_id,
+                        vonage_uuid=getattr(conversation, "vonage_uuid", None),
+                        twilio_sid=getattr(conversation, "twilio_sid", None),
                     ),
-                    conversation_id=conversation_id,
-                    vonage_uuid=getattr(conversation, "vonage_uuid", None),
-                    twilio_sid=getattr(conversation, "twilio_sid", None),
+                    is_interruptible=False
                 )
             )
         
