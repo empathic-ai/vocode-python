@@ -64,7 +64,6 @@ class Call(StreamingConversation[TelephonyOutputDeviceType]):
         self.call_manager = call_manager
 
         agent = agent_factory.create_agent(agent_config, conversation_id=conversation_id, logger=logger)
-        self.logger.info(f"Added number '{from_phone}'")
         call_manager.agents_by_number[from_phone] = agent
 
         super().__init__(
@@ -77,6 +76,8 @@ class Call(StreamingConversation[TelephonyOutputDeviceType]):
             events_manager=events_manager,
             logger=logger,
         )
+
+        self.logger.info(f"Added number '{from_phone}'")
 
     def attach_ws(self, ws: WebSocket):
         self.logger.debug("Trying to attach WS to outbound call")
