@@ -134,7 +134,7 @@ class TelephonyServer:
         response = MessagingResponse()
         response.message(reply_msg)
 
-        return str(response)
+        return Response(content=str(response))
 
     def events(self, request: Request):
         return Response()
