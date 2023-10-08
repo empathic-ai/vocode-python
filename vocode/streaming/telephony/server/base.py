@@ -100,7 +100,7 @@ class TelephonyServer:
             )
 
         # twilio SMS endpoint
-        self.router.add_api_route("/sms", self.handle_sms, methods=["POST"])
+        self.router.add_api_route("/sms", self.handle_sms, methods=["GET, POST"])
 
         # vonage requires an events endpoint
         self.router.add_api_route("/events", self.events, methods=["GET", "POST"])
@@ -127,6 +127,8 @@ class TelephonyServer:
         # Process the incoming message (this step is up to you)
         # Here's a simple example that echoes back the received SMS
         reply_msg = f"You said: {incoming_msg}"
+
+        self.logger.info(f"Responding to message '{incoming_msg}' with '{reply_msg}'!")
 
         # Create a TwiML response
         response = MessagingResponse()
