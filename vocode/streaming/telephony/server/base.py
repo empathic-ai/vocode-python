@@ -45,6 +45,9 @@ from vocode.streaming.transcriber.base_transcriber import (
     Transcription
 )
 from vocode.streaming.telephony.call_manager import CallManager
+from vocode.streaming.agent.base_agent import (
+    TranscriptionAgentInput
+)
 
 class AbstractInboundCallConfig(BaseModel, abc.ABC):
     url: str
@@ -138,11 +141,19 @@ class TelephonyServer:
         
         if phone_number in self.call_manager.agents_by_number:
             self.logger.info(f"Phone number present in call manager!")
+            agent = self.call_manager.agents_by_number[phone_number]
+            conversation = agent.conversation_state_manager.conversation
+            conversation_id = conversation.id
             self.call_manager.agents_by_number[phone_number].input_queue.put_nowait(
-                Transcription(
-                    message=incoming_msg,
-                    confidence=1.0,
-                    is_final=False,
+                TranscriptionAgentInput(
+                    transcription=Transcription(
+                        message=incoming_msg,
+                        confidence=1.0,
+                        is_final=True,
+                    ),
+                    conversation_id=conversation_id,
+                    vonage_uuid=getattr(conversation, "vonage_uuid", None),
+                    twilio_sid=getattr(conversation, "twilio_sid", None),
                 )
             )
         
