@@ -142,7 +142,7 @@ class TelephonyServer:
                 Transcription(
                     message=incoming_msg,
                     confidence=1.0,
-                    is_final=True,
+                    is_final=False,
                 )
             )
         
