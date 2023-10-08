@@ -2,7 +2,7 @@ import abc
 import os
 from functools import partial
 import logging
-from typing import List, Optional
+from typing import List, Optional, Dict
 from fastapi import APIRouter, Form, Request, Response, HTTPException
 from pydantic import BaseModel, Field
 from vocode.streaming.agent.factory import AgentFactory
@@ -41,6 +41,10 @@ from vocode.streaming.utils import create_conversation_id
 from vocode.streaming.utils.events_manager import EventsManager
 from twilio.twiml.messaging_response import MessagingResponse
 from twilio.request_validator import RequestValidator
+from vocode.streaming.agent.base_agent import BaseAgent
+from vocode.streaming.transcriber.base_transcriber import (
+    Transcription
+)
 
 class AbstractInboundCallConfig(BaseModel, abc.ABC):
     url: str
@@ -64,6 +68,8 @@ class VonageAnswerRequest(BaseModel):
 
 
 class TelephonyServer:
+    agents_by_number: Dict[str, BaseAgent] = {}
+
     def __init__(
         self,
         base_url: str,
@@ -89,6 +95,7 @@ class TelephonyServer:
                 agent_factory=agent_factory,
                 synthesizer_factory=synthesizer_factory,
                 events_manager=self.events_manager,
+                telephony_server=self,
                 logger=self.logger,
             ).get_router()
         )
@@ -128,9 +135,18 @@ class TelephonyServer:
         # Process the incoming message (this step is up to you)
         # Here's a simple example that echoes back the received SMS
         reply_msg = f"You said: {incoming_msg}"
-
+        
+        if phone_number in self.agents_by_number:
+            self.agents_by_number[phone_number].input_queue.put_nowait(
+                Transcription(
+                    message=incoming_msg,
+                    confidence=1.0,
+                    is_final=True,
+                )
+            )
+        
         self.logger.info(f"Responding to message '{incoming_msg}' from {phone_number} with '{reply_msg}'!")
-        self.logger.info(f"Responding to form '{form_data}'!")
+        #self.logger.info(f"Responding to form '{form_data}'!")
 
         # Create a TwiML response
         response = MessagingResponse()

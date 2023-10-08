@@ -21,6 +21,7 @@ from vocode.streaming.telephony.config_manager.base_config_manager import (
 )
 from vocode.streaming.telephony.constants import DEFAULT_SAMPLING_RATE
 from vocode.streaming.streaming_conversation import StreamingConversation
+from vocode.streaming.telephony.server.base import TelephonyServer
 from vocode.streaming.transcriber.factory import TranscriberFactory
 from vocode.streaming.utils.events_manager import EventsManager
 from vocode.streaming.utils.conversation_logger_adapter import wrap_logger
@@ -47,6 +48,7 @@ class Call(StreamingConversation[TelephonyOutputDeviceType]):
         agent_factory: AgentFactory = AgentFactory(),
         synthesizer_factory: SynthesizerFactory = SynthesizerFactory(),
         events_manager: Optional[EventsManager] = None,
+        telephony_server: Optional[TelephonyServer] = None,
         logger: Optional[logging.Logger] = None,
     ):
         conversation_id = conversation_id or create_conversation_id()
@@ -59,10 +61,15 @@ class Call(StreamingConversation[TelephonyOutputDeviceType]):
         self.to_phone = to_phone
         self.base_url = base_url
         self.config_manager = config_manager
+        self.telephony_server = telephony_server
+
+        agent = agent_factory.create_agent(agent_config, conversation_id=conversation_id, logger=logger)
+        telephony_server.agents_by_number[from_phone] = agent
+
         super().__init__(
             output_device,
             transcriber_factory.create_transcriber(transcriber_config, logger=logger),
-            agent_factory.create_agent(agent_config, conversation_id=conversation_id, logger=logger),
+            agent,
             synthesizer_factory.create_synthesizer(synthesizer_config, logger=logger),
             conversation_id=conversation_id,
             per_chunk_allowance_seconds=0.01,

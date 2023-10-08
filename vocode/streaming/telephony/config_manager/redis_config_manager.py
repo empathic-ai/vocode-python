@@ -23,7 +23,11 @@ class RedisConfigManager(BaseConfigManager):
 
     async def save_config(self, conversation_id: str, config: BaseCallConfig):
         self.logger.debug(f"Saving config for {conversation_id}")
+        #await self.redis.set(config.from_phone, conversation_id)
         await self.redis.set(conversation_id, config.json())
+
+    #async def get_conversation_id(self, phone_number) -> Optional[str]:
+    #    return await self.redis.get(phone_number)
 
     async def get_config(self, conversation_id) -> Optional[BaseCallConfig]:
         self.logger.debug(f"Getting config for {conversation_id}")

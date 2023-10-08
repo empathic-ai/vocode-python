@@ -24,6 +24,7 @@ from vocode.streaming.telephony.config_manager.base_config_manager import (
     BaseConfigManager,
 )
 from vocode.streaming.telephony.conversation.call import Call
+from vocode.streaming.telephony.server.base import TelephonyServer
 from vocode.streaming.transcriber.factory import TranscriberFactory
 from vocode.streaming.utils.events_manager import EventsManager
 from vocode.streaming.utils.state_manager import TwilioCallStateManager
@@ -50,6 +51,7 @@ class TwilioCall(Call[TwilioOutputDevice]):
         agent_factory: AgentFactory = AgentFactory(),
         synthesizer_factory: SynthesizerFactory = SynthesizerFactory(),
         events_manager: Optional[EventsManager] = None,
+        telephony_server: TelephonyServer = None,
         logger: Optional[logging.Logger] = None,
     ):
         super().__init__(
@@ -66,6 +68,7 @@ class TwilioCall(Call[TwilioOutputDevice]):
             transcriber_factory=transcriber_factory,
             agent_factory=agent_factory,
             synthesizer_factory=synthesizer_factory,
+            telephony_server=telephony_server,
             logger=logger,
         )
         self.base_url = base_url

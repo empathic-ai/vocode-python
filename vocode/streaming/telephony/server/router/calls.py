@@ -16,6 +16,7 @@ from vocode.streaming.telephony.config_manager.base_config_manager import (
 from vocode.streaming.telephony.conversation.call import Call
 from vocode.streaming.telephony.conversation.twilio_call import TwilioCall
 from vocode.streaming.telephony.conversation.vonage_call import VonageCall
+from vocode.streaming.telephony.server.base import TelephonyServer
 from vocode.streaming.transcriber.factory import TranscriberFactory
 from vocode.streaming.utils.base_router import BaseRouter
 from vocode.streaming.utils.events_manager import EventsManager
@@ -29,6 +30,7 @@ class CallsRouter(BaseRouter):
         transcriber_factory: TranscriberFactory = TranscriberFactory(),
         agent_factory: AgentFactory = AgentFactory(),
         synthesizer_factory: SynthesizerFactory = SynthesizerFactory(),
+        telephony_server: Optional[TelephonyServer] = None,
         events_manager: Optional[EventsManager] = None,
         logger: Optional[logging.Logger] = None,
     ):
@@ -38,6 +40,7 @@ class CallsRouter(BaseRouter):
         self.transcriber_factory = transcriber_factory
         self.agent_factory = agent_factory
         self.synthesizer_factory = synthesizer_factory
+        self.telephony_server = telephony_server
         self.events_manager = events_manager
         self.logger = logger or logging.getLogger(__name__)
         self.router = APIRouter()
@@ -72,6 +75,7 @@ class CallsRouter(BaseRouter):
                 agent_factory=agent_factory,
                 synthesizer_factory=synthesizer_factory,
                 events_manager=events_manager,
+                telephony_server=self.telephony_server
             )
         elif isinstance(call_config, VonageCallConfig):
             return VonageCall(

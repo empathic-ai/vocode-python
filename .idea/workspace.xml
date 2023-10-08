@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96d6e21f-c71d-4932-81eb-c142dce4f045" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vocode-python.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vocode-python.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vocode/streaming/telephony/config_manager/redis_config_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/vocode/streaming/telephony/config_manager/redis_config_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vocode/streaming/telephony/conversation/call.py" beforeDir="false" afterPath="$PROJECT_DIR$/vocode/streaming/telephony/conversation/call.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vocode/streaming/telephony/conversation/twilio_call.py" beforeDir="false" afterPath="$PROJECT_DIR$/vocode/streaming/telephony/conversation/twilio_call.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vocode/streaming/telephony/server/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/vocode/streaming/telephony/server/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vocode/streaming/telephony/server/router/calls.py" beforeDir="false" afterPath="$PROJECT_DIR$/vocode/streaming/telephony/server/router/calls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +38,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="full.screen.before.presentation.mode" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager">
     <configuration name="Unnamed" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
@@ -81,7 +87,7 @@
       <workItem from="1692053962459" duration="25000" />
       <workItem from="1695321633752" duration="1735000" />
       <workItem from="1696641524977" duration="990000" />
-      <workItem from="1696646647793" duration="13358000" />
+      <workItem from="1696646647793" duration="16767000" />
     </task>
     <servers />
   </component>
