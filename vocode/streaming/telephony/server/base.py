@@ -113,7 +113,7 @@ class TelephonyServer:
         VALIDATOR = RequestValidator(getenv("TWILIO_AUTH_TOKEN"))
         signature = request.headers.get("X-Twilio-Signature")
         url = str(request.url)
-        params = request.form
+        params = await request.form()
         return VALIDATOR.validate(url, params, signature)
 
     async def handle_sms(self, request: Request):
