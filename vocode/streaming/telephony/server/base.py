@@ -68,7 +68,7 @@ class VonageAnswerRequest(BaseModel):
 
 
 class TelephonyServer:
-    call_manager: CallManager
+    call_manager: CallManager = CallManager()
 
     def __init__(
         self,
@@ -95,7 +95,7 @@ class TelephonyServer:
                 agent_factory=agent_factory,
                 synthesizer_factory=synthesizer_factory,
                 events_manager=self.events_manager,
-                call_manager=call_manager,
+                call_manager=self.call_manager,
                 logger=self.logger,
             ).get_router()
         )
