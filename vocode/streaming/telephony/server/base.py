@@ -150,7 +150,7 @@ class TelephonyServer:
             #transcript = self.call_manager.agents_by_number[phone_number].transcript
             #for event in transcript.event_logs:
 
-            self.logger.info(f"Transcript:\n\n{transcript}\n\n")
+            #self.logger.info(f"Transcript:\n\n{transcript}\n\n")
             self.call_manager.agents_by_number[phone_number].input_queue.put_nowait(
                 InterruptibleEvent(
                     payload=TranscriptionAgentInput(
