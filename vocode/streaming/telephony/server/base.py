@@ -109,7 +109,7 @@ class TelephonyServer:
         self.router.add_api_route("/recordings/{conversation_id}", self.recordings, methods=["GET", "POST"])
         self.logger.info(f"Set up recordings endpoint at https://{self.base_url}/recordings/{{conversation_id}}")
 
-    def validate_twilio_request(self, request: Request) -> bool:
+    async def validate_twilio_request(self, request: Request) -> bool:
         VALIDATOR = RequestValidator(getenv("TWILIO_AUTH_TOKEN"))
         signature = request.headers.get("X-Twilio-Signature")
         url = str(request.url)
@@ -117,7 +117,7 @@ class TelephonyServer:
         return VALIDATOR.validate(url, params, signature)
 
     async def handle_sms(self, request: Request):
-        if not self.validate_twilio_request(request):
+        if not await self.validate_twilio_request(request):
             raise HTTPException(status_code=400, detail="Invalid Twilio request")
 
         # Extract the message body from the incoming POST request
